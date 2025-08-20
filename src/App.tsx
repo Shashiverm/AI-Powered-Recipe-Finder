@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Heart, ChefHat, Search, BookOpen, Trash2, Clock, Users, Loader2 } from 'lucide-react';
 import { HuggingFaceService } from './services/huggingface';
-import { mongoService, MongoRecipe } from './services/mongodb';
-import { parseRecipeText, ParsedRecipe } from './utils/recipeParser';
+import { mongoService, type MongoRecipe } from './services/mongodb';
+import { parseRecipeText, type ParsedRecipe } from './utils/recipeParser';
 import './App.css';
 
 interface Recipe extends ParsedRecipe {

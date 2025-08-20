@@ -5,7 +5,7 @@ export interface HuggingFaceResponse {
 
 export class HuggingFaceService {
   private apiKey: string;
-  private baseUrl = 'https://api-inference.huggingface.co/models';
+  private baseUrl = 'https://api-inference.huggingface.co/models/microsoft/DialoGPT-medium';
 
   constructor() {
     this.apiKey = import.meta.env.VITE_HF_API_KEY || '';
@@ -49,8 +49,19 @@ Recipe:`;
         }),
       });
 
+      if (response.status === 404) {
+        console.warn('Hugging Face API endpoint not found. Using mock response.');
+        return this.getMockRecipe(ingredients);
+      }
+      
+      if (response.status === 401 || response.status === 403) {
+        console.warn('Hugging Face API authentication failed. Check your API key.');
+        return this.getMockRecipe(ingredients);
+      }
+      
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        console.warn(`Hugging Face API error: ${response.status}. Using mock response.`);
+        return this.getMockRecipe(ingredients);
       }
 
       const data: HuggingFaceResponse[] = await response.json();
